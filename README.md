@@ -47,7 +47,49 @@ Next we need to set up the virtual enviornment with the following commands, exec
 
 next navigate to the etc folder and look for a file called cowrie.cfg.dist this is a configuration file which we will need to edit. For me I navigated the following (note) i did have to switch to a debian VM due to issues using ubuntu, but the process is still the same):
 
-    cd cowrie/cowrie/etc
+    cd cowrie/etc
 
 ![image](https://github.com/user-attachments/assets/119adc2e-9291-49e5-86bb-c6ed3c558fbc)
+
+We need to make a new file called cowrie.cfg where we will enable telnet and forward. 
+
+     cp cowrie.cfg.dist ~cowrie/etc/cowrie.cfg
+     nano cowrie.cfg
+     
+![image](https://github.com/user-attachments/assets/9d410c9c-da88-4c96-8550-286a685f7bc7)
+
+Enable telnet (note this is very far down). Make sure to press ctrl+s to save, then ctrl+x to exit nano,
+
+![image](https://github.com/user-attachments/assets/0fc0b154-c7d5-4654-8d1f-8aeb41ac4850)
+
+After this you need to exit out of the virtual enviornment to use the next two commands or it will ask you for a password (which I do not know)
+
+          exit
+          $ sudo iptables -t nat -A PREROUTING -p tcp --dport 22 -j REDIRECT --to-port 2222
+          $ sudo iptables -t nat -A PREROUTING -p tcp --dport 23 -j REDIRECT --to-port 2223
+
+From here we can start the honeypot. switch user back to cowrie, and change directory to cowrie, the run the cowrie start command
+
+          su - cowrie
+          cd cowrie
+          bin/cowrie start
+
+Once we start it we need to get to the log file section and we should see a file called cowrie.log to send it to Splunk
+
+          cd var/log/cowrie
+          ls
+
+![image](https://github.com/user-attachments/assets/22b8cbee-7c28-4033-a4df-154b68ae268d)
+
+Next use
+
+     tail -f cowrie.log 
+
+and we will begin recieving logs on our honeypot.
+
+![image](https://github.com/user-attachments/assets/7dbd6755-29ca-4f98-a142-1f9bf2d86ada)
+
+
+
+
 
