@@ -85,9 +85,50 @@ Next use
 
      tail -f cowrie.log 
 
-and we will begin recieving logs on our honeypot.
+and we will begin recieving logs on our honeypot. Keep the honeypot on for a few hours in order for it to collect data
 
 ![image](https://github.com/user-attachments/assets/7dbd6755-29ca-4f98-a142-1f9bf2d86ada)
+
+Next we need to make sure it can send the logs to our splunk instance. to do that we need to go into the cowrie.config file again and go down to the following section:
+
+     [output_splunk]
+     enabled = true
+     url = https://localhost:8088/services/collector/event
+     token = xxxxxxxxxxxxxx
+     index = cowrie
+     sourcetype = cowrie
+     source = cowrie
+
+you get the proper url and token from our splunk instance. So lets go to Splunk and begin to set up it for collecting our data from the honeypot
+
+## Step 3 Splunk Configuration
+
+go into Splunk and navigate to Settings->Data Inputs-> HTTP Event Collector->Add new. From here name the new data cowrie
+![image](https://github.com/user-attachments/assets/4908f917-3572-4ae7-b414-146de432fd44)
+
+Set the input settings as shown. Hit review and done.
+![image](https://github.com/user-attachments/assets/50929935-7d3c-4eeb-b298-5f94b8d2cd37)
+
+Next go back into your HTTP event collector and copy the token value to the token inside our honeypot and be sure it is enabled
+
+![image](https://github.com/user-attachments/assets/00110fca-bfb9-4966-a99e-792588d214c6)
+
+Next we are going to create a new index for cowrie. go to Settings->Indexes->New Index. Name it cowrie and save. Then go back into Event Collector and add the cowrie index to the event calculator. Now we should be able to collect logs from the honeypot
+![image](https://github.com/user-attachments/assets/44b80b8e-a7df-4771-936d-aaf029e070e4)
+
+Next we will download the ManukaHoneypot App which will act as our dashboard creator. 
+
+https://www.dropbox.com/scl/fi/jupaef16uhgvvvufkc6vz/ManukaHoneyPot.tar.gz?dl=0&e=1&rlkey=k6hy5tyxxhggxttvv0j3frmjt
+
+to install go to Apps->Manage Apps->Install app from file
+
+Give it a few hours and you will start seeing your dashboard become created
+
+![image](https://github.com/user-attachments/assets/b8a231f3-43b1-40c8-996d-0d231a373174)
+
+
+
+
 
 
 
